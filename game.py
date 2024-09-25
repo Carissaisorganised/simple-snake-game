@@ -46,7 +46,7 @@ pen.color("white")
 pen.penup()
 pen.hideturtle()
 pen.goto(0, 260)
-pen.write("Score: 0     High Score:0", align="center", font=("Courier", 24 "normal"))
+pen.write("Score: 0     High Score:0", align="center", font= ("Courier", 24 "normal"))
 
 
 #FUNCTIONS 
@@ -124,4 +124,71 @@ while True:
     pen.write("Score:{}     High Score:{}".format(score, high_score), align="center",
                font=("Courier", 24, "normal"))
 
-    
+    #CHECK FOR A COLLISION WITH FOOD 
+
+    if head.distance(food) < 20: 
+            #MOVE THE FOOD TO A RANDOM POSITION 
+            x = random.randint(-290, 290)
+            y = random.randint(-290, 290)
+            food.goto(x,y)
+
+            #ADD A SEGMENT TO THE SNAKE 
+            new_segment = turtle.Turtle()
+            new_segment.speed(0)
+            new_segment.shape("square")
+            new_segment.color("grey")
+            new_segment.penup()
+            segements.append(new_segment)
+
+            #SHORTEN THE DELAY 
+
+            delay -= 0.001 
+            
+            #INCREASE THE SCORE 
+            score += 10 
+
+            if score > high_score: 
+                high_score = score
+
+            pen.clear()
+            pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
+
+            #MOVE THE END SEGMENTS FIRST IN REVERSE ORDER 
+
+            for index in range(len(segements) -1, 0, -1): 
+                x = segements[index - 1].xcor()
+                y = segements[index - 1].ycor()
+                segements[index].goto(x,y)
+
+            #MOVE SEGMENT 0 TO WHERE THE HEAD IS 
+            if len(segements) > 0: 
+                x = head.xcor()
+                y = head.ycor()
+                segements[0].goto(x,y)
+
+            move()
+
+            #CHECK FOR A COLLIISION WITH THE BODY
+            for segment in segements: 
+                if segment.distance(head) < 20: 
+                    time.sleep(1)
+                    head.goto(0,0)
+                    head.direction = "STOP"
+
+                    #HIDE THE SEGMENTS 
+                    for segment in segements: 
+                        segment.goto(1000,1000)
+
+                    #CLEAR THE SEGMENT LIST 
+                    segment.clear()
+
+                    #RESET THE SCORE 
+                    score = 0 
+
+                    #RESET THE DELAY 
+                    delay = 0.1 
+
+                    pen.clear()
+                    pen.write("Score:   {}  High Score: {}",format(score, high_score), align="center", font=("Courier", 24, "normal"))
+
+                    time.sleep(delay)
