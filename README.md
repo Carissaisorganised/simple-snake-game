@@ -1,6 +1,4 @@
 # simple-snake-game
-Here’s a README file tailored to your Snake Game written in Python using the `turtle` module:
-
 
 # Snake Game
 
